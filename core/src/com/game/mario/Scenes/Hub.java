@@ -60,6 +60,6 @@ public class Hub implements Disposable{
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 }

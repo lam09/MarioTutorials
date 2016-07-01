@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.game.mario.Mario;
 
 /**
  * Created by a.lam.tuan on 23. 6. 2016.
@@ -14,8 +15,5 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Coin extends InteractionTileObject {
     public Coin(World world, TiledMap map, Rectangle bounds) {
         super(world, map, bounds);
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
     }
 }

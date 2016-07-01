@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -16,7 +17,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -27,6 +32,7 @@ import com.game.mario.Mario;
 import com.game.mario.Scenes.Hub;
 import com.game.mario.Sprites.Marioo;
 import com.game.mario.Tools.B2WorldCreator;
+import com.game.mario.Tools.WorldContactListener;
 
 /**
  * Created by a.lam.tuan on 17. 6. 2016.
@@ -46,14 +52,13 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer b2dr;
 
     private Marioo player;
-
+    private TextureAtlas atlas;
     public PlayScreen(Mario game)
     {
 
+        atlas = new TextureAtlas("Mario_and_Enemies.pack");
         this.game = game;
         gameCam = new OrthographicCamera();
-   //     gamePort = new StretchViewport(800, 480 , gameCam);
-//        gamePort = new ScreenViewport(gameCam);
         gamePort = new FitViewport(Mario.V_WIDTH/Mario.PPM,Mario.V_HEIGHT/Mario.PPM,gameCam);
         hub = new Hub(game.batch);
 
@@ -65,7 +70,14 @@ public class PlayScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
 
         new B2WorldCreator(world,map);
-        player = new Marioo(world);
+        player = new Marioo(world,this);
+
+        world.setContactListener(new WorldContactListener());
+
+    }
+
+    public TextureAtlas getAtlas(){
+        return atlas;
     }
 
     @Override
@@ -89,7 +101,7 @@ public class PlayScreen implements Screen {
         handleInput(dt);
 
         world.step(1/60f,6,2);
-
+    player.update(dt);
         gameCam.position.x = player.b2body.getPosition().x;
 
         gameCam.update();
@@ -103,6 +115,12 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.render();
         b2dr.render(world,gameCam.combined);
+
+        game.batch.setProjectionMatrix(gameCam.combined);
+        game.batch.begin();
+        player.draw(game.batch);
+        game.batch.end();
+
         game.batch.setProjectionMatrix(hub.stage.getCamera().combined);
         hub.stage.draw();
     }

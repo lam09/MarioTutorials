@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.mario.Mario;
+import com.game.mario.Sprites.Brick;
+import com.game.mario.Sprites.Coin;
 
 /**
  * Created by a.lam.tuan on 23. 6. 2016.
@@ -51,27 +53,12 @@ public class B2WorldCreator {
         for(MapObject object: map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
 
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX()+rect.getWidth()/2)/Mario.PPM,(rect.getY()+rect.getHeight()/2)/Mario.PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth()/2/Mario.PPM,rect.getHeight()/2/Mario.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
+           new Brick(world,map,rect);
         }
         //coin
         for(MapObject object: map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX()+rect.getWidth()/2)/Mario.PPM,(rect.getY()+rect.getHeight()/2)/Mario.PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth()/2/Mario.PPM,rect.getHeight()/2/Mario.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
+           new Coin(world,map,rect);
         }
     }
 }
