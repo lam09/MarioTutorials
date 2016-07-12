@@ -105,7 +105,7 @@ public class Marioo extends Sprite {
         CircleShape shape =  new CircleShape();
         shape.setRadius(6/Mario.PPM);
         fdef.filter.categoryBits = Mario.MARIO_BIT;
-        fdef.filter.maskBits = Mario.DEFAULT_BIT|Mario.COIN_BIT| Mario.BRICK_BIT;
+        fdef.filter.maskBits = Mario.GROUND_BIT |Mario.COIN_BIT| Mario.BRICK_BIT | Mario.ENEMY_BIT|Mario.OBJECT_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

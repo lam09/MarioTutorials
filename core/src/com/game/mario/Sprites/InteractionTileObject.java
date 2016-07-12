@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.mario.Mario;
+import com.game.mario.screens.PlayScreen;
 
 /**
  * Created by a.lam.tuan on 23. 6. 2016.
@@ -23,10 +24,10 @@ public abstract class InteractionTileObject {
     protected Rectangle bounds;
     protected Body body;
     protected Fixture fixture;
-    public InteractionTileObject(World world, TiledMap map, Rectangle bounds)
+    public InteractionTileObject(PlayScreen screen, Rectangle bounds)
     {
-        this.world=world;
-        this.map=map;
+        this.world=screen.getWorld();
+        this.map=screen.getMap();
         this.bounds=bounds;
 
         BodyDef bdef = new BodyDef();
